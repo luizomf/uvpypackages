@@ -1,0 +1,82 @@
+[project]
+name = "titan-workspace"
+version = "0.0.1"
+description = "The author didn't write a description yet."
+requires-python = "<=3.14.2"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Luiz Otávio Miranda" }]
+dependencies = []
+
+[tool.uv]
+managed = true # The project is managed by uv
+package = false # But it is not a package.
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.uv.sources]
+titan = { workspace = true }
+package_a = { workspace = true }
+package_b = { workspace = true }
+
+# ALL COMMENTED LINES ARE FOR REFERENCE (COPY AND PASTE WHERE NEEDED)
+
+# [tool.hatch.build.targets.wheel]
+# packages = [] # We are the workspace and have no packages.
+# include = [] # If you have files to be includes, use this
+
+# [project.scripts]
+# dockerlabs = "dockerlabs.cli:main"
+
+# [tool.ruff]
+# line-length = 88
+# target-version = "py314"
+# fix = true
+# show-fixes = true
+# indent-width = 4
+# exclude = ["venv", ".venv", "env", ".env", "node_modules", "__pycache__"]
+ 
+# [tool.ruff.lint]
+# select = ["ALL"]
+# ignore = ["D", "T201", "INP001"]
+ 
+# [tool.ruff.lint.per-file-ignores]
+# "tests/**/*.py" = ["ANN201", "S101"]
+ 
+# [tool.ruff.format]
+# quote-style = "double"
+# indent-style = "space"
+# line-ending = "lf"
+ 
+# # [tool.ruff.lint.isort]
+# # known-first-party = ["titan"]
+ 
+# [tool.pyright]
+# typeCheckingMode = "standard"
+# pythonVersion = "3.14.2"
+# include = ["src"] 
+# exclude = [
+#   "**/venv",
+#   "**/.venv",
+#   "**/env",
+#   "**/.env",
+#   "**/node_modules",
+#   "**/__pycache__",
+# ]
+# venv = ".venv"
+# venvPath = "."
+# executionEnvironments = [{ root = "src" }]
+# useLibraryCodeForTypes = true
+# reportMissingImports = true
+# reportMissingTypeStubs = true
+# stubPath = "stubs"
+ 
+# [tool.pytest.ini_options]
+# addopts = "-s --color=yes --tb=short"
+# pythonpath = ["src"]
+# testpaths = ["tests"]
