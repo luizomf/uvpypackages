@@ -1,0 +1,62 @@
+[project]
+name = "titan-workspace"
+version = "0.0.1"
+description = "The author didn't write a description yet."
+requires-python = ">=3.14"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Luiz Otávio Miranda" }]
+dependencies = ["package-a", "package-b", "titan"]
+
+[tool.uv]
+managed = true
+package = false
+
+[tool.uv.workspace]
+members = ["packages/*"]
+
+[tool.uv.sources]
+titan = { workspace = true }
+package-a = { workspace = true }
+package-b = { workspace = true }
+
+[tool.ruff]
+line-length = 88
+target-version = "py314"
+fix = true
+show-fixes = true
+indent-width = 4
+exclude = ["venv", ".venv", "env", ".env", "node_modules", "__pycache__"]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["D", "T201", "INP001"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = ["ANN201", "S101"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+
+[tool.pyright]
+typeCheckingMode = "standard"
+pythonVersion = "3.14.2"
+include = ["packages"]
+exclude = [
+  "**/venv",
+  "**/.venv",
+  "**/env",
+  "**/.env",
+  "**/node_modules",
+  "**/__pycache__",
+]
+venv = ".venv"
+venvPath = "."
+executionEnvironments = [{ root = "packages" }]
+reportMissingTypeStubs = true
+stubPath = "stubs"
+
+[dependency-groups]
+dev = ["mypy>=1.19.0"]

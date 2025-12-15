@@ -19,12 +19,15 @@ MAIN_README_PATH=$PROJECT_DIR/README.md
 
 PACKAGES_PREFIX="package_"
 
+PACKAGE_MAIN_NAME="${PROJECT_DIR_NAME}"
 PACKAGE_A_NAME="${PACKAGES_PREFIX}a"
 PACKAGE_B_NAME="${PACKAGES_PREFIX}b"
 
+PACKAGE_MAIN_DIR=$PACKAGES_DIR/$PACKAGE_MAIN_NAME
 PACKAGE_A_DIR=$PACKAGES_DIR/$PACKAGE_A_NAME
 PACKAGE_B_DIR=$PACKAGES_DIR/$PACKAGE_B_NAME
 
+PACKAGE_MAIN_SRCDIR="${PACKAGE_MAIN_DIR}/src/${PROJECT_DIR_NAME}"
 PACKAGE_A_SRCDIR="${PACKAGE_A_DIR}/src/${PROJECT_DIR_NAME}"
 PACKAGE_B_SRCDIR="${PACKAGE_B_DIR}/src/${PROJECT_DIR_NAME}"
 
@@ -53,11 +56,11 @@ build-backend = "hatchling.build"
 [tool.hatch.build.targets.wheel]
 packages = ["./src/$3"]
 
-[tool.ruff]
-extend = '../../pyproject.toml'
+# [tool.ruff]
+# extend = '../pyproject.toml'
 
-[tool.pyright]
-extends = '../../pyproject.toml'
+# [tool.pyright]
+# extends = '../pyproject.toml'
 EOF
 }
 
@@ -72,25 +75,27 @@ if __name__ == "__main__":
 EOF
 }
 
-mkdir -p $PACKAGES_DIR $PACKAGE_A_SRCDIR $PACKAGE_B_SRCDIR
+mkdir -p $PACKAGES_DIR $PACKAGE_A_SRCDIR $PACKAGE_B_SRCDIR $PACKAGE_MAIN_SRCDIR
 
 create_readme $MAIN_README_PATH $PROJECT_DIR_NAME
-
+create_readme "${PACKAGE_MAIN_DIR}/README.md" $PACKAGE_MAIN_NAME
 create_readme "${PACKAGE_A_DIR}/README.md" $PACKAGE_A_NAME
 create_readme "${PACKAGE_B_DIR}/README.md" $PACKAGE_B_NAME
 
+create_package_pytoml "${PACKAGE_MAIN_DIR}/pyproject.toml" $PACKAGE_MAIN_NAME $PROJECT_DIR_NAME
 create_package_pytoml "${PACKAGE_A_DIR}/pyproject.toml" $PACKAGE_A_NAME $PROJECT_DIR_NAME
 create_package_pytoml "${PACKAGE_B_DIR}/pyproject.toml" $PACKAGE_B_NAME $PROJECT_DIR_NAME
 
+create_sample_fn "${PACKAGE_MAIN_SRCDIR}/main.py" 'run' $PACKAGE_MAIN_NAME
 create_sample_fn "${PACKAGE_A_SRCDIR}/mod_a.py" 'func_a' $PACKAGE_A_NAME
-create_sample_fn "${PACKAGE_A_SRCDIR}/mod_b.py" 'func_b' $PACKAGE_B_NAME
+create_sample_fn "${PACKAGE_B_SRCDIR}/mod_b.py" 'func_b' $PACKAGE_B_NAME
 
 cat << EOF > $MAIN_PYTOML_PATH
 [project]
 name = "$PROJECT_DIR_NAME-workspace"
 version = "$PROJECT_VERSION"
 description = "The author didn't write a description yet."
-requires-python = "<=$PYTHON_VERSION"
+requires-python = ">=$PYTHON_VERSION"
 readme = "README.md"
 license = "MIT"
 authors = [{ name = "$AUTHOR_NAME" }]
@@ -108,7 +113,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.uv.sources]
-$PROJECT_DIR_NAME = { workspace = true }
+$PACKAGE_MAIN_NAME = { workspace = true }
 $PACKAGE_A_NAME = { workspace = true }
 $PACKAGE_B_NAME = { workspace = true }
 
@@ -117,9 +122,6 @@ $PACKAGE_B_NAME = { workspace = true }
 # [tool.hatch.build.targets.wheel]
 # packages = [] # We are the workspace and have no packages.
 # include = [] # If you have files to be includes, use this
-
-# [project.scripts]
-# dockerlabs = "dockerlabs.cli:main"
 
 # [tool.ruff]
 # line-length = 88
@@ -141,13 +143,10 @@ $PACKAGE_B_NAME = { workspace = true }
 # indent-style = "space"
 # line-ending = "lf"
  
-# # [tool.ruff.lint.isort]
-# # known-first-party = ["$PROJECT_DIR_NAME"]
- 
 # [tool.pyright]
 # typeCheckingMode = "standard"
 # pythonVersion = "$PYTHON_VERSION_NUMBER"
-# include = ["src"] 
+# include = ["${PACKAGES_DIR_NAME}/${PACKAGE_MAIN_NAME}", "${PACKAGES_DIR_NAME}/${PACKAGE_A_NAME}","${PACKAGES_DIR_NAME}/${PACKAGE_B_NAME}"] 
 # exclude = [
 #   "**/venv",
 #   "**/.venv",
@@ -158,14 +157,7 @@ $PACKAGE_B_NAME = { workspace = true }
 # ]
 # venv = ".venv"
 # venvPath = "."
-# executionEnvironments = [{ root = "src" }]
-# useLibraryCodeForTypes = true
-# reportMissingImports = true
+# executionEnvironments = [{ root = "$PACKAGES_DIR_NAME" }]
 # reportMissingTypeStubs = true
 # stubPath = "stubs"
- 
-# [tool.pytest.ini_options]
-# addopts = "-s --color=yes --tb=short"
-# pythonpath = ["src"]
-# testpaths = ["tests"]
 EOF

@@ -1,13 +1,20 @@
 [project]
-name = "package_a"
+name = "titan"
 version = "0.0.1"
+readme = "README.md"
+license = "MIT"
+authors = [{ name = "Luiz Otávio Miranda" }]
+dependencies = []
+
+[project.scripts]
+titan = "titan.mod_titan:func_titan"
 
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["./src/titan"]
+packages = ['./src/titan']
 
 [tool.ruff]
 extend = '../../pyproject.toml'
