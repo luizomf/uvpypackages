@@ -8,6 +8,7 @@ __localcode
 .env 
 .env.*
 model_cache/
+TEMP.md
 
 # Virtual environments
 # Byte-compiled / optimized / DLL files
