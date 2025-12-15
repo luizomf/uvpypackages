@@ -1,3 +1,2 @@
-def func_a(msg: str = "") -> str:
+def func_a(msg: str = "") -> None:
     print("PACKAGE_A", msg)
-    return msg
